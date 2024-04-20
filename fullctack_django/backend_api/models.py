@@ -39,8 +39,3 @@ def save_user_profile(sender, instance, **kwargs):
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
-
-
-class YouTubeVideos(models.Model):
-    title = models.CharField(max_length=100)
-    channel = models.CharField(max_length=100)
