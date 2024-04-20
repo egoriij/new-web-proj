@@ -9,5 +9,5 @@ urlpatterns = [
         TokenRefreshView.as_view(),
     ),
     path("register/", views.RegisterView.as_view()),
-    path ("dashboard/", views.dashboard),
+    path("dashboard/", views.dashboard),
 ]

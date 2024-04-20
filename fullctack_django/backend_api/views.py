@@ -21,19 +21,24 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+
+
+# @api_view(["GET"])
+# def getRoutes(request):
+#     routes = ["/api/token/", "/api/register/", "/api/token/refresh/"]
+#     return Response(routes)
 
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
 def dashboard(request):
     if request.method == "GET":
-        response = f"Hey{request.user}, You are seeing a GET response"
+        response = f"Hey {request.user}, You are seeing a GET response"
         return Response({"response": response}, status=status.HTTP_200_OK)
     elif request.method == "POST":
-        text = request.POST.get("text")
-        response = f"Hey{request.user}, Your text is: {text}"
-        return Response({"response": response}, status=status.HTTP_200_OK)
-
-    return Response({"error": "Invalid request"}, status=status.HTTP_400_BAD_REQUEST)
+        text = "POST IS CORRECT"
+        data = f"{text}"
+        return Response({"response": data}, status=status.HTTP_200_OK)
+    return Response({}, status.HTTP_400_BAD_REQUEST)
