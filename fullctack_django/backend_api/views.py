@@ -1,23 +1,39 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .models import YouTubeVideos
-from .serializer import YouTubeVideoSerializer
+from .models import User, Profile
+from .serializer import (
+    UserSerializer,
+    MyTokenObtainPairSerializer,
+    RegisterSerializer,
+)
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import generics, status
 
 # Create your views here.
 
 
-class YouTubeVideoView(APIView):
-    def get(self, request):
-        output = [
-            {"title": output.title, "channel": output.channel}
-            for output in YouTubeVideos.objects.all()
-        ]
-        return Response(output)
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
-    def post(self, request):
-        serializer = YouTubeVideoSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
 
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = RegisterSerializer
+
+
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def dashboard(request):
+    if request.method == "GET":
+        response = f"Hey{request.user}, You are seeing a GET response"
+        return Response({"response": response}, status=status.HTTP_200_OK)
+    elif request.method == "POST":
+        text = request.POST.get("text")
+        response = f"Hey{request.user}, Your text is: {text}"
+        return Response({"response": response}, status=status.HTTP_200_OK)
+
+    return Response({"error": "Invalid request"}, status=status.HTTP_400_BAD_REQUEST)
