@@ -1,6 +1,6 @@
 # web app #
 
-### Start React server (http://127.0.0.1:3000) ###
+### Start React client (http://127.0.0.1:3000) ###
 ```cmd
 new-web-proj> cd .\frontend\
 new-web-proj\frontend> npm start
